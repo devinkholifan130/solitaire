@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire Game</title>
+        <link rel="website icon" href="https://cdn2.steamgriddb.com/logo/a561e7ebcac8441387d4fe143fdef87f.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-page">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">← Back</a>
+        <h1>♠ Solitaire ♥</h1>
+        <div class="top-buttons">
+            <button class="tutorial-btn" onclick="toggleTutorial()" id="tutorialBtn">📖 Tutorial</button>
+            <button class="new-game-btn" onclick="startGame()">🔄 New Game</button>
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat">
+            <span class="stat-label">Score</span>
+            <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Moves</span>
+            <span class="stat-value" id="moves">0</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Time</span>
+            <span class="stat-value" id="timer">00:00</span>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="tutorial-modal" id="tutorialModal">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2>📚 How to Play Solitaire</h2>
+                <button class="close-tutorial" onclick="toggleTutorial()">✕</button>
+            </div>
+            
+            <div class="tutorial-sections">
+                <div class="tutorial-section">
+                    <h3>🎯 Objective</h3>
+                    <p>Move all 52 cards to the <strong>Foundation piles</strong> (top right) in order from Ace → King by suit.</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3>📋 Rules</h3>
+                    <ol>
+                        <li><strong>Tableau (bottom):</strong> Build DOWN in alternating colors (e.g., red 7 on black 8)</li>
+                        <li><strong>Foundation (top right):</strong> Build UP by suit from Ace → King</li>
+                        <li><strong>Stockpile (top left):</strong> Click to draw cards to Waste pile</li>
+                        <li><strong>Only Kings</strong> can be placed on empty tableau spaces</li>
+                    </ol>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3>🎮 How to Play</h3>
+                    <ul>
+                        <li><strong>Drag & Drop:</strong> Move cards between piles</li>
+                        <li><strong>Double-click:</strong> Auto-send card to Foundation</li>
+                        <li><strong>Click Stockpile:</strong> Draw new cards (↻)</li>
+                        <li><strong>Look for Aces:</strong> Move them to Foundation first!</li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3>📊 Scoring System</h3>
+                    <ul class="scoring-list">
+                        <li><span class="score-positive">+10</span> Move card to Foundation</li>
+                        <li><span class="score-positive">+5</span> Move from Waste to Tableau</li>
+                        <li><span class="score-positive">+15</span> Move from Tableau to Foundation</li>
+                        <li><span class="score-positive">+5</span> Flip face-down card</li>
+                        <li><span class="score-negative">-5</span> Draw from Stockpile</li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3>💡 Tips for Beginners</h3>
+                    <ul>
+                        <li>✅ Always move Aces to Foundation immediately</li>
+                        <li>✅ Expose face-down cards in Tableau first</li>
+                        <li>✅ Don't empty a tableau space unless you have a King</li>
+                        <li>✅ Think ahead - plan your moves</li>
+                        <li>✅ Use double-click for quick moves to Foundation</li>
+                    </ul>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3>🎴 Card Values</h3>
+                    <p><strong>Ranks:</strong> A (1), 2, 3, 4, 5, 6, 7, 8, 9, 10, J (11), Q (12), K (13)</p>
+                    <p><strong>Suits:</strong> ♥ Hearts (Red), ♦ Diamonds (Red), ♣ Clubs (Black), ♠ Spades (Black)</p>
+                </div>
+            </div>
+
+            <div class="tutorial-footer">
+                <button class="start-tutorial-btn" onclick="startInteractiveTutorial()">🎓 Start Interactive Tutorial</button>
+                <button class="close-tutorial-btn" onclick="toggleTutorial()">Got it! Let's Play</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-step" id="tutorialStep">
+            <div class="step-content">
+                <h3 id="stepTitle">Step 1</h3>
+                <p id="stepDescription">Description here</p>
+                <div class="step-buttons">
+                    <button onclick="prevTutorialStep()" id="prevStep" style="display:none">← Previous</button>
+                    <button onclick="nextTutorialStep()" id="nextStep">Next →</button>
+                    <button onclick="endInteractiveTutorial()" class="skip-btn">Skip Tutorial</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Board -->
+    <div class="game-board" id="gameBoard">
+
+        <!-- Stock & Waste -->
+        <div class="stock-waste-area">
+            <div class="stock-pile tutorial-highlight" id="stockPile" onclick="drawFromStock()">
+                <div class="card-placeholder">↻</div>
+                <div class="tutorial-tooltip" id="stockTooltip">Click to draw cards</div>
+            </div>
+            <div class="waste-pile tutorial-highlight" id="wastePile"></div>
+        </div>
+
+        <!-- Foundation -->
+        <div class="foundation-area" id="foundationArea">
+            <div class="foundation-pile tutorial-highlight" id="foundation-0" data-suit="hearts">
+                <span class="foundation-label">♥</span>
+            </div>
+            <div class="foundation-pile tutorial-highlight" id="foundation-1" data-suit="diamonds">
+                <span class="foundation-label">♦</span>
+            </div>
+            <div class="foundation-pile tutorial-highlight" id="foundation-2" data-suit="clubs">
+                <span class="foundation-label">♣</span>
+            </div>
+            <div class="foundation-pile tutorial-highlight" id="foundation-3" data-suit="spades">
+                <span class="foundation-label">♠</span>
+            </div>
+        </div>
+
+        <!-- Tableau -->
+        <div class="tableau-area" id="tableauArea">
+            <div class="tableau-pile tutorial-highlight" id="tableau-0"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-1"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-2"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-3"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-4"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-5"></div>
+            <div class="tableau-pile tutorial-highlight" id="tableau-6"></div>
+        </div>
+    </div>
+
+    <!-- Win Overlay -->
+    <div class="win-overlay" id="winOverlay">
+        <div class="win-message">
+            <h2>🎉 You Win! 🎉</h2>
+            <p>Score: <span id="finalScore">0</span></p>
+            <p>Moves: <span id="finalMoves">0</span></p>
+            <p>Time: <span id="finalTime">00:00</span></p>
+            <button onclick="startGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="card.js"></script>
+</body>
+</html>

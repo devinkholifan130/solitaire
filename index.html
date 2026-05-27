@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitaire | HTML, CSS & JavaScript</title>
+    <link rel="website icon" href="https://cdn2.steamgriddb.com/logo/a561e7ebcac8441387d4fe143fdef87f.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="card.js"></script>
+    
+    <!-- 🔹 PWA: Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Solitaire">
+    <link rel="apple-touch-icon" href="/Solitaire Logo.png">
+</head>
+<body class="landing-page">
+
+    <div class="landing-container">
+        <div class="landing-header">
+            <div class="card-icon">🂡</div>
+            <h1>♠ Solitaire ♥</h1>
+            <p class="subtitle">The Classic Card Game</p>
+        </div>
+
+        <!-- Rules & Instructions Dropdowns -->
+        <div class="instructions-section">
+            <details class="dropdown">
+                <summary>📜 Rules of Solitaire</summary>
+                <div class="dropdown-content">
+                    <ol>
+                        <li>The game uses a standard 52-card deck with ranks A–K (Ace through King) and suits ♥ ♦ ♣ ♠.</li>
+                        <li>The tableau has 7 piles. Pile 1 has 1 card, pile 2 has 2 cards... pile 7 has 7 cards. Top card face-up, rest face-down.</li>
+                        <li>Remaining cards form the <strong>stockpile</strong> (face-down). Draw to the <strong>waste pile</strong> (face-up).</li>
+                        <li><strong>Foundation piles</strong> are built up in suit from Ace → King (e.g., A♥, 2♥, 3♥... K♥).</li>
+                        <li>On the <strong>tableau</strong>, place cards one rank lower in <em>opposite color</em> (e.g., red 7 on black 8).</li>
+                        <li>Cards from the waste pile can be moved to tableau or foundation following the same rules.</li>
+                        <li><strong>Win:</strong> All 52 cards in foundations. <strong>Lose:</strong> No valid moves and stockpile empty.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="dropdown">
+                <summary>🎮 How to Play</summary>
+                <div class="dropdown-content">
+                    <ol>
+                        <li>Cards are shuffled and dealt into 7 tableau piles automatically.</li>
+                        <li>Look for <strong>Aces</strong> — move them to the foundation piles first.</li>
+                        <li>Build foundations <em>up in suit</em> (A → K).</li>
+                        <li>Build tableau columns <em>down in alternating colors</em> (K → A).</li>
+                        <li>Click the <strong>stockpile</strong> to draw cards to the waste pile.</li>
+                        <li><strong>Drag & Drop</strong> cards between piles. <strong>Double-click</strong> a card to auto-send it to foundation.</li>
+                        <li>Keep playing until all cards reach the foundations — then you <strong>WIN!</strong> 🎉</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="dropdown">
+                <summary>💡 Tips & Strategies</summary>
+                <div class="dropdown-content">
+                    <ul>
+                        <li><strong>Expose face-down cards</strong> in the tableau as soon as possible.</li>
+                        <li><strong>Prioritize moving Aces and low cards</strong> to the foundations early.</li>
+                        <li><strong>Keep tableau piles balanced</strong> to maximize your options.</li>
+                        <li><strong>Use the stockpile wisely</strong> — don't draw cards unnecessarily.</li>
+                        <li><strong>Think ahead</strong> before making moves, especially when moving cards from the waste pile.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="dropdown">
+                <summary>📊 Scoring System</summary>
+                <div class="dropdown-content">
+                    <ul>
+                        <li><strong>Move a card to foundation:</strong> +10 points</li>
+                        <li><strong>Move a card from waste to tableau:</strong> +5 points</li>
+                        <li><strong>Move a card from tableau to foundation:</strong> +15 points</li>
+                        <li><strong>Draw from stockpile:</strong> -5 points</li>
+                        <li><strong>Undo a move:</strong> -10 points</li>
+                    </ul>
+                    <p><em>Note: Scoring is optional and can be used for fun or competitive play!</em></p>
+                </div>
+            </details>
+
+            <details class="dropdown">
+                <summary>🃏 Ranks & Suits Explanation</summary>
+                <div class="dropdown-content">
+                    <p><strong>Ranks:</strong> A (Ace), 2, 3, 4, 5, 6, 7, 8, 9, 10, J (Jack), Q (Queen), K (King)</p>
+                    <p><strong>Suits:</strong> ♥ (Hearts), ♦ (Diamonds), ♣ (Clubs), ♠ (Spades)</p>
+                </div>
+            </details>
+        </div>
+
+        <a href="game.html" class="start-btn">
+            <span class="btn-icon">🎴</span> Start Game
+        </a>
+    </div>
+
+    <!-- 🔹 PWA: Service Worker Registration (DIPERBAIKI: dibungkus <script> & ditaruh sebelum </body>) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+                    .catch(err => console.log('❌ Service Worker failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
